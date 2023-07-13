@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1045824447200",
+    "project_id": "android-development-847ea",
+    "storage_bucket": "android-development-847ea.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1045824447200:android:583c68a995cd32a7bea685",
+        "android_client_info": {
+          "package_name": "com.habibie.youapp_test"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1045824447200-avkmr4tmfr977q6ku906stus6ub7mfk2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyALzI_6RPNZJGLeGVEsyUYWnb4RG4SmRZo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1045824447200-avkmr4tmfr977q6ku906stus6ub7mfk2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
