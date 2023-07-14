@@ -13,7 +13,18 @@ class AuthenticationRepository {
 
   Stream<AuthenticationStatus> get status async* {
     await Future<void>.delayed(const Duration(seconds: 1));
-    yield AuthenticationStatus.unauthenticated;
+
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? jsonUser = prefs.getString(Constants.userKey);
+
+    print('==> userAuthenticated: $jsonUser');
+
+    if (jsonUser != null) {
+      yield AuthenticationStatus.authenticated;
+    } else {
+      yield AuthenticationStatus.unauthenticated;
+    }
+
     yield* _controller.stream;
   }
 
@@ -47,8 +58,9 @@ class AuthenticationRepository {
         }
       } else {
         if (findByEmail.docs.first.data()["password"] == password) {
-          prefs.setString(Constants.userKey,
-              User.fromJson(findByEmail.docs.first.data()).toRawJson());
+          final User user = User.fromJson(findByEmail.docs.first.data());
+
+          prefs.setString(Constants.userKey, user.toRawJson());
 
           _controller.add(AuthenticationStatus.authenticated);
         }
