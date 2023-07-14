@@ -58,14 +58,14 @@ class User extends Equatable {
       );
 
   Map<String, dynamic> toJson() => {
-        "email": email,
-        "username": username,
-        "password": password,
-        "name": name,
-        "gender": gender,
-        "birthday": birthday?.toIso8601String(),
-        "horoscope": horoscope,
-        "zodiac": zodiac,
+        "email": email ?? "",
+        "username": username ?? "",
+        "password": password ?? "",
+        "name": name ?? "",
+        "gender": gender ?? "",
+        "birthday": birthday?.toIso8601String() ?? "",
+        "horoscope": horoscope ?? "",
+        "zodiac": zodiac ?? "",
         "height": height ?? 0,
         "weight": weight ?? 0,
       };
