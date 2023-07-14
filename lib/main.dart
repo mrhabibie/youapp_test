@@ -69,7 +69,7 @@ class _AppViewState extends State<AppView> {
     return GetMaterialApp(
       title: 'YouApp Test by Habibie',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.yellow[800]!),
         useMaterial3: true,
       ),
       builder: (context, child) =>
