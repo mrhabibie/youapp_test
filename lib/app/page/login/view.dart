@@ -83,9 +83,6 @@ class LoginPage extends StatelessWidget {
                               onChanged: (value) => context
                                   .read<LoginBloc>()
                                   .add(LoginPasswordChanged(value)),
-                              errorText: state.status == LoginStatus.failure
-                                  ? 'Login failed, check your Username/Password.'
-                                  : null,
                             ),
                           ),
                         ),
@@ -115,8 +112,8 @@ class LoginPage extends StatelessWidget {
                                 ),
                                 TextSpan(
                                   recognizer: TapGestureRecognizer()
-                                    ..onTap =
-                                        () => Get.to(const RegisterPage()),
+                                    ..onTap = () =>
+                                        Get.to(() => const RegisterPage()),
                                   text: 'Register here',
                                   style: myTextStyle(
                                     color: Colors.yellow[800],

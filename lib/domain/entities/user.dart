@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:equatable/equatable.dart';
 
 class User extends Equatable {
@@ -37,6 +39,10 @@ class User extends Equatable {
 
   // Convenience getter to determine whether the current User is not empty.
   bool get isNotEmpty => this != User.empty;
+
+  factory User.fromRawJson(String str) => User.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
 
   factory User.fromJson(Map<String, dynamic> json) => User(
         email: json["email"] ?? "unknown@mail.com",

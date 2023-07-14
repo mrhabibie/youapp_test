@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:youapp_test/data/utils/constants.dart';
 import 'package:youapp_test/domain/entities/user.dart';
 
 enum AuthenticationStatus { unknown, authenticated, unauthenticated }
@@ -15,29 +17,49 @@ class AuthenticationRepository {
     yield* _controller.stream;
   }
 
-  Future<bool> logIn({
-    required String username,
-    required String password,
-  }) async {
+  Future<bool> logIn(
+      {required String username, required String password}) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
     try {
-      final docRef = _db.collection("users").doc(username);
-      docRef.get().then((DocumentSnapshot doc) {
-        final data = doc.data() as Map<String, dynamic>;
+      QuerySnapshot<Map<String, dynamic>> findByEmail = await _db
+          .collection("users")
+          .where("email", isEqualTo: username)
+          .limit(1)
+          .get();
+      if (findByEmail.docs.isEmpty) {
+        QuerySnapshot<Map<String, dynamic>> findByUsername = await _db
+            .collection("users")
+            .where("username", isEqualTo: username)
+            .limit(1)
+            .get();
+        if (findByUsername.docs.isEmpty) {
+          return false;
+        } else {
+          if (findByUsername.docs.first.data()["password"] == password) {
+            prefs.setString(Constants.userKey,
+                User.fromJson(findByUsername.docs.first.data()).toRawJson());
 
-        return true;
-      }, onError: (e) {
-        _controller.add(AuthenticationStatus.unauthenticated);
+            _controller.add(AuthenticationStatus.authenticated);
+          }
 
-        return false;
-      });
+          return findByUsername.docs.first.data()["password"] == password;
+        }
+      } else {
+        if (findByEmail.docs.first.data()["password"] == password) {
+          prefs.setString(Constants.userKey,
+              User.fromJson(findByEmail.docs.first.data()).toRawJson());
+
+          _controller.add(AuthenticationStatus.authenticated);
+        }
+
+        return findByEmail.docs.first.data()["password"] == password;
+      }
     } catch (e) {
-      print('==> firebase error: ${e.toString()}');
-      _controller.add(AuthenticationStatus.unauthenticated);
+      print('==> login error (e): ${e.toString()}');
 
       return false;
     }
-
-    return false;
   }
 
   Future<bool> register({
@@ -66,7 +88,10 @@ class AuthenticationRepository {
     }
   }
 
-  void logOut() {
+  void logOut() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.remove(Constants.userKey);
+
     _controller.add(AuthenticationStatus.unauthenticated);
   }
 
