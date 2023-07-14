@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:youapp_test/domain/entities/user.dart';
 
 enum AuthenticationStatus { unknown, authenticated, unauthenticated }
 
@@ -37,11 +38,32 @@ class AuthenticationRepository {
     }
 
     return false;
+  }
 
-    /*await Future.delayed(
-      const Duration(milliseconds: 300),
-      () => _controller.add(AuthenticationStatus.authenticated),
-    );*/
+  Future<bool> register({
+    required String email,
+    required String username,
+    required String password,
+  }) async {
+    try {
+      bool isSuccess = false;
+
+      final userData =
+          User(email: email, username: username, password: password);
+      isSuccess =
+          await _db.collection("users").add(userData.toJson()).then((value) {
+        return true;
+      }, onError: (e) {
+        print('==> register error: ${e.toString()}');
+
+        return false;
+      });
+
+      return isSuccess;
+    } catch (e) {
+      print('==> register error (e): ${e.toString()}');
+      return false;
+    }
   }
 
   void logOut() {

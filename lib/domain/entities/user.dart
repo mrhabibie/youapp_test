@@ -38,6 +38,32 @@ class User extends Equatable {
   // Convenience getter to determine whether the current User is not empty.
   bool get isNotEmpty => this != User.empty;
 
+  factory User.fromJson(Map<String, dynamic> json) => User(
+        email: json["email"] ?? "unknown@mail.com",
+        username: json["username"] ?? "unknown",
+        password: json["password"] ?? "unknown",
+        name: json["name"] ?? "unknown",
+        gender: json["gender"] ?? "unknown",
+        birthday: DateTime.tryParse(json["birthday"]) ?? DateTime(1945, 08, 17),
+        horoscope: json["horoscope"] ?? "unknown",
+        zodiac: json["zodiac"] ?? "unknown",
+        height: json["height"] ?? 0,
+        weight: json["weight"] ?? 0,
+      );
+
+  Map<String, dynamic> toJson() => {
+        "email": email,
+        "username": username,
+        "password": password,
+        "name": name,
+        "gender": gender,
+        "birthday": birthday?.toIso8601String(),
+        "horoscope": horoscope,
+        "zodiac": zodiac,
+        "height": height ?? 0,
+        "weight": weight ?? 0,
+      };
+
   @override
   List<Object?> get props => [
         email,
