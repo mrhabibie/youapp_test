@@ -1,25 +1,15 @@
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:youapp_test/data/utils/constants.dart';
 import 'package:youapp_test/domain/entities/user.dart';
 
 class UserRepository {
   User? _user;
 
   Future<User?> getUser() async {
-    if (_user != null) return _user;
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? jsonString = prefs.getString(Constants.userKey);
+    _user = User.fromRawJson(jsonString ?? "");
 
-    return Future.delayed(
-      const Duration(milliseconds: 300),
-      () => _user = User(
-        email: 'test@gmail.com',
-        username: 'mrhabibie',
-        password: '123',
-        name: 'Habibie',
-        height: 156,
-        weight: 45,
-        birthday: DateTime(2023, 08, 11),
-        gender: 'male',
-        horoscope: 'Leo',
-        zodiac: 'Peler',
-      ),
-    );
+    return _user;
   }
 }
